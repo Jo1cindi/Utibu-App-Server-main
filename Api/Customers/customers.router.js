@@ -4,6 +4,18 @@ const bcrypt = require("bcrypt");
 
 //Create Account
 router.post("/signup", async (req, res) => {
+  
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader(
+    "Access-Control-Allow-Methods",
+    "GET, POST, OPTIONS, PUT, PATCH, DELETE"
+  );
+  res.setHeader(
+    "Access-Control-Allow-Headers",
+    "X-Requested-With,content-type"
+  );
+  res.setHeader("Access-Control-Allow-Credentials", true);
+
   const customerID = Math.floor(Math.random() * 100000);
   const firstName = req.body.firstName;
   const lastName = req.body.lastName;

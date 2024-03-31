@@ -8,11 +8,7 @@ app.use(express.json({extended: false}))
 
 const cors = require("cors")
 
-app.use(cors({
-  origin: ["*" ],
-  credentials: true,
-  methods: "POST, GET, PUT, DELETE"
-}))
+app.use(cors({ origin: "*" }));
 
 
 
