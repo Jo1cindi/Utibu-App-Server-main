@@ -29,7 +29,7 @@ sql.connect(config, (error) => {
 });
 
 app.listen(8080, () => {
-  console.log("listening on 8080");
+  console.log("listening on 8085");
 });
 
 app.use(bodyParser.json())
