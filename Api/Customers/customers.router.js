@@ -36,19 +36,28 @@ router.post("/signup", async (req, res) => {
             message: "This user exists",
           });
         } else {
-          bcrypt.hash(password, 10).then((encryptedPassword)=>{
-            new sql.Request().query(
-              `insert into Customers (Customer_ID, First_Name, Last_Name, Email, Phone, Password) values ('${customerID}', '${firstName}', '${lastName}', '${email}', '${phoneNumber}', '${encryptedPassword}')`,
-              (err, results) => {
-                if (err) {
-                  console.log(err);
-                  res.status(500).send("Internal Server Error");
-                } else {
-                  console.log(results);
-                  res.status(200).send("Customer added");
-                }
+          bcrypt.genSalt(10, (err, salt)=>{
+            if(err){
+              console.log(err)
+            }
+            bcrypt.hash(password, salt, (error, hash)=>{
+              if(error){
+                console.log(error)
               }
-            );
+
+              new sql.Request().query(
+                `insert into Customers (Customer_ID, First_Name, Last_Name, Email, Phone, Password) values ('${customerID}', '${firstName}', '${lastName}', '${email}', '${phoneNumber}', '${hash}')`,
+                (err, results) => {
+                  if (err) {
+                    console.log(err);
+                    res.status(500).send("Internal Server Error");
+                  } else {
+                    console.log(results);
+                    res.status(200).send("Customer added");
+                  }
+                }
+              );
+            })
           })
         }
         console.log(result);
