@@ -22,7 +22,7 @@ router.post("/signup", async (req, res) => {
   const email = req.body.email;
   const phoneNumber = req.body.phoneNumber;
   const password = req.body.password;
-  const hashedPassword = await bcrypt.hash(password, 10);
+  // const hashedPassword = await bcrypt.hash(password, 10);
 
   new sql.Request().query(
     `select * from Customers where Email = '${email}' and Phone = '${phoneNumber}'`,
@@ -36,18 +36,20 @@ router.post("/signup", async (req, res) => {
             message: "This user exists",
           });
         } else {
-          new sql.Request().query(
-            `insert into Customers (Customer_ID, First_Name, Last_Name, Email, Phone, Password) values ('${customerID}', '${firstName}', '${lastName}', '${email}', '${phoneNumber}', '${hashedPassword}')`,
-            (err, results) => {
-              if (err) {
-                console.log(err);
-                res.status(500).send("Internal Server Error");
-              } else {
-                console.log(results);
-                res.status(200).send("Customer added");
+          bcrypt.hash(password, 10).then((encryptedPassword)=>{
+            new sql.Request().query(
+              `insert into Customers (Customer_ID, First_Name, Last_Name, Email, Phone, Password) values ('${customerID}', '${firstName}', '${lastName}', '${email}', '${phoneNumber}', '${encryptedPassword}')`,
+              (err, results) => {
+                if (err) {
+                  console.log(err);
+                  res.status(500).send("Internal Server Error");
+                } else {
+                  console.log(results);
+                  res.status(200).send("Customer added");
+                }
               }
-            }
-          );
+            );
+          })
         }
         console.log(result);
       }
