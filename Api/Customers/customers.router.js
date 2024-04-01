@@ -123,6 +123,7 @@ router.post("/signin", async (req, res) => {
 router.put("/resetpassword", async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
+  
 
   bcrypt.genSalt(password, 10, (err, hashedPassword)=>{
     if(err){
