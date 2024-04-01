@@ -123,12 +123,16 @@ router.post("/signin", async (req, res) => {
 router.put("/resetpassword", async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
-  
 
-  bcrypt.genSalt(password, 10, (err, hashedPassword)=>{
+
+  bcrypt.genSalt(password, 10, (err, salt)=>{
     if(err){
       console.log(err)
-    }else{
+    }
+    bcrypt.hash(password, salt, (err, hashedPassword)=>{
+      if(err){
+        console.log(err)
+      }
       new sql.Request().query(
         `update Customers set Password = '${hashedPassword}' where Email = '${email}'`,
         (err, result) => {
@@ -141,7 +145,7 @@ router.put("/resetpassword", async (req, res) => {
           }
         }
       );
-    }
+    })
   })
 });
 
