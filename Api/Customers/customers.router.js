@@ -4,7 +4,6 @@ const bcrypt = require("bcrypt");
 
 //Create Account
 router.post("/signup", async (req, res) => {
-  
   res.setHeader("Access-Control-Allow-Origin", "*");
   res.setHeader(
     "Access-Control-Allow-Methods",
@@ -25,7 +24,7 @@ router.post("/signup", async (req, res) => {
   // const hashedPassword = await bcrypt.hash(password, 10);
 
   new sql.Request().query(
-    `select * from Customers where Email = '${email}' and Phone = '${phoneNumber}'`,
+    `select * from Customers where Email = '${email}'`,
     (error, result) => {
       if (error) {
         console.log(error);
@@ -33,32 +32,45 @@ router.post("/signup", async (req, res) => {
       } else {
         if (result.recordset[0]) {
           res.status(409).send({
-            message: "This user exists",
+            message: "Email already in use",
           });
         } else {
-          bcrypt.genSalt(10, (err, salt)=>{
-            if(err){
-              console.log(err)
-            }
-            bcrypt.hash(password, salt, (error, hash)=>{
-              if(error){
-                console.log(error)
-              }
-
-              new sql.Request().query(
-                `insert into Customers (Customer_ID, First_Name, Last_Name, Email, Phone, Password) values ('${customerID}', '${firstName}', '${lastName}', '${email}', '${phoneNumber}', '${hash}')`,
-                (err, results) => {
+          new sql.Request().query(
+            `select * from Customers where Phone = '${phoneNumber}'`,
+            (err, result) => {
+              if (err) {
+                console.log(err);
+              } else if (result.recordset[0]) {
+                res.status(409).send({
+                  message: "Phone number already in use",
+                });
+              } else {
+                bcrypt.genSalt(10, (err, salt) => {
                   if (err) {
                     console.log(err);
-                    res.status(500).send("Internal Server Error");
-                  } else {
-                    console.log(results);
-                    res.status(200).send("Customer added");
                   }
-                }
-              );
-            })
-          })
+                  bcrypt.hash(password, salt, (error, hash) => {
+                    if (error) {
+                      console.log(error);
+                    }
+
+                    new sql.Request().query(
+                      `insert into Customers (Customer_ID, First_Name, Last_Name, Email, Phone, Password) values ('${customerID}', '${firstName}', '${lastName}', '${email}', '${phoneNumber}', '${hash}')`,
+                      (err, results) => {
+                        if (err) {
+                          console.log(err);
+                          res.status(500).send("Internal Server Error");
+                        } else {
+                          console.log(results);
+                          res.status(200).send("Customer added");
+                        }
+                      }
+                    );
+                  });
+                });
+              }
+            }
+          );
         }
         console.log(result);
       }
@@ -116,7 +128,5 @@ router.put("/resetpassword", async (req, res) => {
     }
   );
 });
-
-
 
 module.exports = router;
