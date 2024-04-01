@@ -37,3 +37,6 @@ app.use(bodyParser.json())
 //Customers 
 const customerRouter  = require("./Api/Customers/customers.router")
 app.use("/api", customerRouter)
+
+const medicineRouter= require("./Api/Medicine/Medicine.router")
+app.use("/api", medicineRouter)
