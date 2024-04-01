@@ -23,8 +23,9 @@ router.get("/get-medicine", (req, res) => {
         res.status(500).send("Internal Server Error");
     }else{
         console.log(result)
+        // res.json(result)
         res.status(200).send({
-          messge: "Medicine retrieved"
+          data: result.recordsets[0],
         })
     }
     
