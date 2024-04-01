@@ -1,6 +1,7 @@
 const router = require("express").Router();
 const sql = require("mssql/msnodesqlv8");
 const bcrypt = require("bcrypt");
+const jwt = require("jsonwebtoken")
 
 //Create Account
 router.post("/signup", async (req, res) => {
@@ -97,8 +98,16 @@ router.post("/signin", async (req, res) => {
           password,
           result.recordset[0].Password
         );
+        const tokenPayload  = {
+          email: email
+        }
+        const token = jwt.sign(tokenPayload, 'SECRET' )
         if (compare) {
-          res.status(200).send("Login Successful");
+          res.status(200).send({
+            message: "Login Successful",
+            token: token
+          });
+          console.log(token)
         } else {
           res.status(401).send("Incorrect Email or Password");
         }
