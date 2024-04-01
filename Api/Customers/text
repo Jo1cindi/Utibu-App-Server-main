@@ -10,3 +10,17 @@
                 }
               }
             );
+
+            new sql.Request().query(
+              `update Customers set Password = '${hashedPassword}' where Email = '${email}'`,
+              (err, result) => {
+                if (err) {
+                  console.log(err);
+                }
+                if (result.recordsets) {
+                  console.log(result);
+                  res.status(200).send("Password updated successfully");
+                }
+              }
+            );
+

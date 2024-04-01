@@ -124,29 +124,31 @@ router.put("/resetpassword", async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
 
-
-  bcrypt.genSalt(password, 10, (err, salt)=>{
-    if(err){
-      console.log(err)
+  bcrypt.genSalt(10, (err, salt) => {
+    if (err) {
+      console.log(err);
     }
-    bcrypt.hash(password, salt, (err, hashedPassword)=>{
-      if(err){
-        console.log(err)
+    bcrypt.hash(password, salt, (error, hash) => {
+      if (error) {
+        console.log(error);
       }
+
       new sql.Request().query(
-        `update Customers set Password = '${hashedPassword}' where Email = '${email}'`,
-        (err, result) => {
+        `update Customers set Password = '${hash}' where Email = '${email}'`,
+        (err, results) => {
           if (err) {
             console.log(err);
-          }
-          if (result.recordsets) {
-            console.log(result);
-            res.status(200).send("Password updated successfully");
+            res.status(500).send("Internal Server Error");
+          } else {
+            console.log(results);
+            res.status(200).send("Customer added");
           }
         }
       );
-    })
-  })
+    });
+  });
+
+  
 });
 
 module.exports = router;
