@@ -123,20 +123,25 @@ router.post("/signin", async (req, res) => {
 router.put("/resetpassword", async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
-  const hashedPassword = await bcrypt.hash(password, 10);
 
-  new sql.Request().query(
-    `update Customers set Password = '${hashedPassword}' where Email = '${email}'`,
-    (err, result) => {
-      if (err) {
-        console.log(err);
-      }
-      if (result.recordsets) {
-        console.log(result);
-        res.status(200).send("Password updated successfully");
-      }
+  bcrypt.genSalt(password, 10, (err, hashedPassword)=>{
+    if(err){
+      console.log(err)
+    }else{
+      new sql.Request().query(
+        `update Customers set Password = '${hashedPassword}' where Email = '${email}'`,
+        (err, result) => {
+          if (err) {
+            console.log(err);
+          }
+          if (result.recordsets) {
+            console.log(result);
+            res.status(200).send("Password updated successfully");
+          }
+        }
+      );
     }
-  );
+  })
 });
 
 module.exports = router;
