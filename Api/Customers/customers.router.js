@@ -141,7 +141,7 @@ router.put("/resetpassword", async (req, res) => {
             res.status(500).send("Internal Server Error");
           } else {
             console.log(results);
-            res.status(200).send("Customer added");
+            res.status(200).send("Password updated!");
           }
         }
       );
