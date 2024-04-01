@@ -104,6 +104,7 @@ router.post("/signin", async (req, res) => {
         const token = jwt.sign(tokenPayload, 'SECRET' )
         if (compare) {
           res.status(200).send({
+            name: result.recordset[0].First_Name,
             message: "Login Successful",
             token: token
           });
