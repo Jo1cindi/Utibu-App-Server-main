@@ -1,12 +1,12 @@
 const router = require("express").Router();
 const sql = require("mssql/msnodesqlv8");
 
-router.post("/get-arv-medicine", (req, res) => {
-  // const category = req.body.category
+router.post("/get-a-medicine", (req, res) => {
+  const category = req.body.category
 
   
 
-  new sql.Request().query(`select * from Medicine where Category = 'ARV'`, (err, results)=>{
+  new sql.Request().query(`select * from Medicine where Category = '${category}'`, (err, results)=>{
     if(err){
         console.log(err)
         res.status(500).send("Internal Server Error");
