@@ -11,7 +11,7 @@ router.post("/get-medicine", (req, res) => {
     }if(results){
       return res.status(200).send(results.recordsets[0]); 
   }
-        
+   
     
   });
 });
