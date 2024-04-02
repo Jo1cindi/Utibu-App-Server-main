@@ -1,7 +1,7 @@
 const router = require("express").Router();
 const sql = require("mssql/msnodesqlv8");
 
-router.post("/get-a-medicine", (req, res) => {
+router.post("/get-medicine", (req, res) => {
   const category = req.body.category
 
   
