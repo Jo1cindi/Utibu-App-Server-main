@@ -1,16 +1,16 @@
 const express = require("express");
 const sql = require("mssql/msnodesqlv8");
-const bodyParser  = require("body-parser");
+const bodyParser = require("body-parser");
 
 const app = express();
 
-app.use(express.json({extended: false}))
+app.use(express.json({ extended: false }));
 
-const cors = require("cors")
+const cors = require("cors");
 
-app.use(cors({ origin: "*" }));
-
-
+app.use(
+  cors({ origin: "*", credentials: true, methods: "POST, GET, PUT, DELETE" })
+);
 
 //Database Configuration
 let config = {
@@ -32,11 +32,11 @@ app.listen(8080, () => {
   console.log("listening on 8080");
 });
 
-app.use(bodyParser.json())
+app.use(bodyParser.json());
 
-//Customers 
-const customerRouter  = require("./Api/Customers/customers.router")
-app.use("/api", customerRouter)
+//Customers
+const customerRouter = require("./Api/Customers/customers.router");
+app.use("/api", customerRouter);
 
-const medicineRouter= require("./Api/Medicine/Medicine.router")
-app.use("/api", medicineRouter)
+const medicineRouter = require("./Api/Medicine/Medicine.router");
+app.use("/api", medicineRouter);

@@ -4,6 +4,8 @@ const sql = require("mssql/msnodesqlv8");
 router.post("/get-arv-medicine", (req, res) => {
   // const category = req.body.category
 
+  
+
   new sql.Request().query(`select * from Medicine where Category = 'ARV'`, (err, results)=>{
     if(err){
         console.log(err)
