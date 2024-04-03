@@ -40,7 +40,7 @@ router.post("/get-orders", (req, res) => {
   router.post("/count-orders", (req, res) => {
     const customerID = req.body.customerID 
     
-    new sql.Request().query(`select count (*) as totalUnfulfilledOrders from Orders where Customer_ID = '${customerID}' and Order_Date = '${orderDate}' and fulfilled = 'No'`, (err, results)=>{
+    new sql.Request().query(`select count (*) as totalUnfulfilledOrders from Orders where Customer_ID = '${customerID}' and fulfilled = 'No'`, (err, results)=>{
       if(err){
           console.log(err);
           res.status(500).send("Internal Server Error");
