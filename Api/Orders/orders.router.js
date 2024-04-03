@@ -23,10 +23,8 @@ router.post("/add-order", (req, res) => {
 
 router.post("/get-orders", (req, res) => {
     const customerID = req.body.customerID
-    const orderDate = req.body.orderDate
-   
-    
-    new sql.Request().query(`select * from Orders where Customer_ID = '${customerID}' and Order_Date = '${orderDate}' and fulfilled = 'No'`, (err, results)=>{
+
+    new sql.Request().query(`select * from Orders where Customer_ID = '${customerID}' and fulfilled = 'No'`, (err, results)=>{
       if(err){
           console.log(err);
           res.status(500).send("Internal Server Error");
