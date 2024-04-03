@@ -22,18 +22,26 @@ router.post("/add-order", (req, res) => {
 });
 
 router.post("/get-orders", (req, res) => {
-    const customerID = req.body.customerID
-
-    new sql.Request().query(`select * from Orders where Customer_ID = '${customerID}' and fulfilled = 'No'`, (err, results)=>{
-      if(err){
-          console.log(err);
-          res.status(500).send("Internal Server Error");
-      } else if(results) {
-          return res.status(200).send(results.recordset); 
+    const customerID = req.body.customerID;
+  
+    // SQL query to get orders along with medicine information
+    const query = `
+      SELECT Orders.*, Medicine.*
+      FROM Orders
+      INNER JOIN Medicine ON Orders.MedicineID = Medicine.MedicineID
+      WHERE Orders.Customer_ID = '${customerID}' AND Orders.fulfilled = 'No'
+    `;
+  
+    new sql.Request().query(query, (err, results) => {
+      if (err) {
+        console.log(err);
+        res.status(500).send("Internal Server Error");
+      } else if (results) {
+        return res.status(200).send(results.recordset);
       }
+    });
   });
   
-  });
 
   router.post("/count-orders", (req, res) => {
     const customerID = req.body.customerID 
