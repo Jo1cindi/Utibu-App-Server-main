@@ -38,9 +38,7 @@ router.post("/get-orders", (req, res) => {
   });
 
   router.post("/count-orders", (req, res) => {
-    const customerID = req.body.customerID
-    const orderDate = req.body.orderDate
-   
+    const customerID = req.body.customerID 
     
     new sql.Request().query(`select count (*) as totalUnfulfilledOrders from Orders where Customer_ID = '${customerID}' and Order_Date = '${orderDate}' and fulfilled = 'No'`, (err, results)=>{
       if(err){
@@ -52,6 +50,22 @@ router.post("/get-orders", (req, res) => {
   });
   
   });
+
+  router.post("/fulfill-orders", (req, res) => {
+    const customerID = req.body.customerID
+    
+    new sql.Request().query(`update Orders set fullfilled = 'Yes' where Customer_ID =  ${customerID}`, (err, results)=>{
+      if(err){
+          console.log(err);
+          res.status(500).send("Internal Server Error");
+      } else if(results) {
+          return res.status(200).send("Order fulfilled"); 
+      }
+  });
+  
+  });
+
+  
   
 
 
