@@ -40,3 +40,6 @@ app.use("/api", customerRouter);
 
 const medicineRouter = require("./Api/Medicine/Medicine.router");
 app.use("/api", medicineRouter);
+
+const orderRouter = require("./Api/Orders/orders.router")
+app.use("/api", orderRouter)
